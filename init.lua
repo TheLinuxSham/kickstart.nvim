@@ -300,6 +300,25 @@ require('lazy').setup({
     end,
   },
 
+  -- syntax highlighting
+  {
+    'nvim-treesitter/nvim-treesitter',
+    branch = 'main', -- New rewritten branch
+    build = ':TSUpdate',
+    config = function()
+      local ts = require 'nvim-treesitter'
+      local parsers = { 'lua', 'vim', 'vimdoc', 'bash', 'markdown', 'zig', 'go', 'html', 'c', 'python' }
+
+      for _, parser in ipairs(parsers) do
+        pcall(ts.install, parser)
+      end
+
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function() pcall(vim.treesitter.start) end,
+      })
+    end,
+  },
+
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.autopairs',
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
