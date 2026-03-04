@@ -89,29 +89,15 @@ return {
         end
       end,
     })
-
-    -- LSP servers and clients are able to communicate to each other what features they support.
-    --  By default, Neovim doesn't support everything that is in the LSP specification.
-    --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
-    --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
     local capabilities = require('blink.cmp').get_lsp_capabilities()
-
-    -- Enable the following language servers
-    --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-    --  See `:help lsp-config` for information about keys and how to configure
     local servers = {
       -- clangd = {},
       -- gopls = {},
       -- pyright = {},
       -- rust_analyzer = {},
-      zig = {},
+      zls = {},
+      bashls = {},
       lua_ls = {},
-      --
-      -- Some languages (like typescript) have entire language plugins that can be useful:
-      --    https://github.com/pmizio/typescript-tools.nvim
-      --
-      -- But for many setups, the LSP (`ts_ls`) will work just fine
-      -- ts_ls = {},
     }
 
     -- Ensure the servers and tools above are installed
@@ -134,14 +120,6 @@ return {
       vim.lsp.config(name, server)
       vim.lsp.enable(name)
     end
-
-    vim.lsp.config('zls', {
-      cmd = { '/usr/bin/zls' },
-      filetypes = { 'zig', 'zir' },
-      -- root_dir = lspconfig.util.root_pattern('build.zig', '.git') or vim.loop.cwd,
-      single_file_support = true,
-    })
-    vim.lsp.enable 'zls'
 
     -- Special Lua Config, as recommended by neovim help docs
     vim.lsp.config('lua_ls', {
